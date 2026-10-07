@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Prenota il tuo tavolo VIP</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #111111, #292929);
+      color: #ffffff;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 600px;
+      background: #ffffff;
+      color: #222222;
+      border-radius: 18px;
+      padding: 45px 35px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+    }
+
+    .vip {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      color: #111111;
+    }
+
+    .date {
+      margin-top: 12px;
+      font-size: 17px;
+      font-weight: bold;
+      color: #9a7620;
+    }
+
+    .description {
+      margin-top: 25px;
+      line-height: 1.6;
+      color: #555555;
+    }
+
+    .info {
+      margin-top: 25px;
+      padding: 18px;
+      background: #f7f7f7;
+      border-radius: 10px;
+      color: #444444;
+      font-size: 15px;
+    }
+
+    .continue {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 15px 35px;
+      border-radius: 8px;
+      background: #b08a28;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+
+    .continue:hover {
+      background: #8f6d1e;
+    }
+
+    .continue.disabled {
+      background: #aaaaaa;
+      pointer-events: none;
+    }
+
+    /* COOKIE BANNER */
+
+    .cookie-banner {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+
+      width: calc(100% - 30px);
+      max-width: 750px;
+
+      background: #ffffff;
+      color: #222222;
+
+      padding: 25px;
+
+      border-radius: 15px;
+
+      box-shadow: 0 8px 35px rgba(0,0,0,0.35);
+
+      z-index: 9999;
+    }
+
+    .cookie-banner h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .cookie-banner p {
+      margin: 0 0 20px;
+      color: #555555;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      border: none;
+      padding: 12px 22px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .accept {
+      background: #b08a28;
+      color: white;
+    }
+
+    .accept:hover {
+      background: #8f6d1e;
+    }
+
+    .reject {
+      background: #eeeeee;
+      color: #333333;
+    }
+
+    .reject:hover {
+      background: #dddddd;
+    }
+
+    @media (max-width: 600px) {
+
+      .card {
+        padding: 35px 22px;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+
+      .buttons {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <div class="card">
+
+      <div class="vip">✨</div>
+
+      <h1>Prenota il tuo tavolo VIP</h1>
+
+      <div class="date">
+        8 OTTOBRE 2026
+      </div>
+
+      <p class="description">
+        Per prenotare il tuo tavolo VIP compila il modulo
+        inserendo i dati richiesti.
+      </p>
+
+      <div class="info">
+        Ti verranno richiesti:
+        <br><br>
+        <strong>Nome e Cognome</strong><br>
+        <strong>Numero di persone</strong><br>
+        <strong>Numero di telefono</strong>
+      </div>
+
+      <a
+        id="formLink"
+        class="continue disabled"
+        href="#"
+      >
+        PRENOTA IL TUO TAVOLO
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- COOKIE / PRIVACY -->
+
+  <div id="cookieBanner" class="cookie-banner">
+
+    <h2>🍪 Privacy e cookie</h2>
+
+    <p>
+      Prima di continuare, ti informiamo che questa pagina
+      può utilizzare tecnologie necessarie al suo corretto
+      funzionamento e per ricordare le tue preferenze.
+      Cliccando su "Accetta" potrai procedere alla prenotazione.
+    </p>
+
+    <div class="buttons">
+
+      <button
+        id="accept"
+        class="accept"
+      >
+        Accetta
+      </button>
+
+      <button
+        id="reject"
+        class="reject"
+      >
+        Rifiuta
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const GOOGLE_FORM =
+      "https://docs.google.com/forms/d/e/1FAIpQLSeX2dHZX153kQu_6Q6IRsNQe2fsisskSX9MMmC3XkfV7KdsFA/viewform?usp=publish-editor";
+
+
+    const banner =
+      document.getElementById("cookieBanner");
+
+    const accept =
+      document.getElementById("accept");
+
+    const reject =
+      document.getElementById("reject");
+
+    const formLink =
+      document.getElementById("formLink");
+
+
+    function enableForm() {
+
+      formLink.href = GOOGLE_FORM;
+
+      formLink.classList.remove("disabled");
+
+      banner.style.display = "none";
+    }
+
+
+    // Se l'utente ha già accettato
+
+    if (
+      localStorage.getItem("cookieConsent")
+      === "accepted"
+    ) {
+
+      enableForm();
+
+    }
+
+
+    // ACCETTA
+
+    accept.addEventListener(
+      "click",
+      function() {
+
+        localStorage.setItem(
+          "cookieConsent",
+          "accepted"
+        );
+
+        enableForm();
+
+      }
+    );
+
+
+    // RIFIUTA
+
+    reject.addEventListener(
+      "click",
+      function() {
+
+        alert(
+          "Per procedere alla prenotazione è necessario accettare."
+        );
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
